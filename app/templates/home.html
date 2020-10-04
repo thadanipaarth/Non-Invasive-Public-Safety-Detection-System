@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <title>Safety Detection Engine</title>
+    <!-- Bootstrap Files Start -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Bootstrap Files End -->
+    <style>
+    .space{
+        margin-top: 5%;
+    }
+    .result {
+        border: 1px solid #ccc;
+    }
+    .White_Box{
+        border-radius: 20px;
+        padding: 15px;
+        border: 4px solid white;
+        
+    }
+    .left_margin{
+        margin-left: 2%;
+    }
+    .right_margin{
+        margin-right: 2%;
+    }
+    .heightfull{
+    	height: 97%;
+    	overflow-y: auto;
+    }
+    body{
+        background: #344040;
+        color: white;
+        overflow-x: hidden;
+      }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    {% if original_input %}
+    <script type="text/javascript">
+        Swal.fire({
+          title: 'Result',
+          icon: 'success',
+          html:'Predicted Health Index:'+'<p style="font-size:50px">{{ result_health }}</p>'+'<p style="font-size:10px"> 0-None 1-Mild 2-Moderate 3-Severe</p>' + '<br>' + 'Mask Condition: ' + '<p style="font-size:50px">{{ result_mask }}</p>'+'<p style="font-size:10px"> 0-No Mask Detected 1-Mask Detected</p>',
+          confirmButtonColor: '#344040',
+          confirmButtonText: 'Okay'
+        })
+    </script>
+    {% endif %}
+    <nav class="navbar navbar-dark bg-dark">
+      <span class="navbar-brand mb-0 h1">Non Invasive Safety Detection Engine</span>
+    </nav>
+ 
+        <div class="row">
+            <div class="col">
+                <div class="space White_Box left_margin heightfull">
+                    The following values are obtained from:
+                    <ul>
+                        <li><strong>Fever: </strong> These values is obtained using thermal camera sensor.If the value is greater than 100 F then 1 else normal body temperature is indicated as 0 (Values field can take 0 and 1)</li>
+                        <br>
+                        <li><strong>Tiredness/Stress: </strong>These values are obtained using the CNN model which takes input as thermal and optical images for user's face and detects if he/she is drowsy or has signs of fatigue and stress. (Values field can take 0 and 1)  </li>
+                         <br>
+
+                        <li><strong> Dry-Cough: </strong> These values is obtained using Audio Classifier Module (CNN model) which takes audio from audio sensors and detects if person is coughing or not.(Values field can take 0 and 1)</li> 
+                         <br>
+
+                        <li><strong> Difficulty-inBreathing: </strong> These values is obtained using Audio Classifier Module (CNN model) which takes audio from audio sensors and detects if person has difficultity in breathing or not.(Values field can take 0 and 1)</li>
+                          <br>
+                         <li><strong> Sore-Throat: </strong>These values is obtained using Audio Classifier Module (CNN model) which takes audio from audio sensors and detects if person has sore throat or not.(Values field can take 0 and 1) </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <form action="{{ url_for('home') }}" method="POST" class="space White_Box heightfull">
+                    <fieldset>
+                        <legend>Input values:</legend>
+                        Mask:
+                        <input name="Mask" type="number" required>
+                        <br>
+                        <br>Fever:
+                        <input name="Fever" type="number" required>
+                        <br>
+                        <br> Tiredness:
+                        <input name="Tiredness" type="number" required>
+                        <br>
+                        
+                        <br> Dry-Cough:
+                        <input name="Dry-Cough" type="number" required>
+                        <br>
+
+                        <br> Difficulty-inBreathing:
+                        <input name="Difficulty-in-Breathing" type="number" required>
+                        <br>
+                        <br> Sore-Throat:
+                        <input name="Sore-Throat" type="number" required>
+                        <br>
+                         <br> Nasal-Congestion:
+                        <input name="Nasal-Congestion" type="number" required>
+                        <br>
+                        <br> Runny-Nose:
+                        <input name="Runny-Nose" type="number" required>
+                        <br>
+                         <br> Gender_Female:
+                        <input name="Gender_Female" type="number" required>
+                        <br>
+                        <br> Gender_Male:
+                        <input name="Gender_Male" type="number" required>
+                        <br>
+                        <br>
+                        <button type="submit" class="btn btn-light">Submit</button>
+                    </fieldset>
+                </form>
+<!--                 {% if original_input %}
+                <br>
+                <div class="result" align="center">
+
+                        {% for variable, value in original_input.items() %}
+                            <b>{{ variable }}</b> : {{ value }}
+                        {% endfor %}
+                        <br>
+                        <br> Predicted Safe/Non-Safe:
+                                 <p style="font-size:50px">{{ result }}</p>
+                                 <p style="font-size:10px"> 0-None 1-Mild 2-Moderate 3-Severe</p>
+                </div>
+                {% endif %} -->
+            </div>
+            <div class="col">
+                <div class="space White_Box right_margin heightfull">
+                    The following values are obtained from:
+                    <ul>
+                        <li><strong> Nasal-Congestion: </strong> These values is obatined using Audio Classifier Module (CNN model) which takes audio from audio sensors and detects if person has nasal congestion or not.(Values field can take 0 and 1)</li>
+                          <br>
+                        <li><strong>Runny-Nose: </strong> These values is obatined using Audio Classifier Module (CNN model) which takes audio from audio sensors and detects if person has runny nose or not.(Values field can take 0 and 1) </li>
+                         <br> 
+                       <li><strong>Gender-Female and Gender-Male:</strong> These value is obtained using CNN model which takes face image as input and detects whether person is male or female based on features.(Values field can take 0 and 1)(Note: Please make sure either of them is true) </li>
+                          <br>                        
+                       <li><strong>Mask-Detected:</strong> These value is obtained from CNN model which takes cropped face image as input and detects whether there is protection or not.(Values field can take 0 and 1)</li>
+                         <br>     
+                  </ul>
+                </div>
+            </div>
+    </div>
+    <!-- Bootstrap Files Start-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <!-- Bootstrap Files End -->
+
+</body>
+</html>
